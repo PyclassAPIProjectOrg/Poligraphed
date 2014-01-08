@@ -7,6 +7,7 @@ This is a repo for our project
 # Roster
 ####
 #Include name, role, skills, etc.
+
 Cam
   Skills: 
   
@@ -26,6 +27,7 @@ Nick
 # Project Overview
 ####
 #TODO
+
 We know the project is finished when:
   A user can login, provide:
 	  -search term
@@ -35,8 +37,3 @@ We know the project is finished when:
 	  -graph
   can save:
 	  -search
-	  
-####
-# Wireframe
-####
-#TODO
