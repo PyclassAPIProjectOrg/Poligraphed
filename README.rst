@@ -8,8 +8,35 @@ This is a repo for our project
 ####
 #Include name, role, skills, etc.
 Cam
+  Skills: 
+  
 Jade
+  Skills: 
+  
 John
-Jordan - PM
+  Skills: 
+  
+Jordan - Project Manager
+  Skills: 
+  
 Nick
+  Skills: Databases, Backend
 
+####
+# Project Overview
+####
+#TODO
+We know the project is finished when:
+  A user can login, provide:
+	  -search term
+	  -date range
+	  -boolean keywords or categories
+  receives:
+	  -graph
+  can save:
+	  -search
+	  
+####
+# Wireframe
+####
+#TODO
