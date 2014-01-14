@@ -9,7 +9,7 @@ This is a repo for our project
 #Include name, role, skills, etc.
 
 Cam
-  Skills: 
+  Skills: Databases, Backend, Minor HTML/CSS
   
 Jade
   Skills: 
