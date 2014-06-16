@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <title>PyClass API Project</title>
+      <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"/>
+      <link rel="stylesheet" href="/static/css/noiselist.css"/>
+    </head>
+  <body>
+    <div class="topbar">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="#">data</a>
+          <ul class="nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="/about">About</a></li>
+             <a href="{{ url_for('about') }}">About</a>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+          <form action="" class="pull-right">
+            <input class="input-small" type="text" placeholder="Username">
+            <input class="input-small" type="password" placeholder="Password">
+            <button class="btn" type="submit">Sign in</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="content">
+        <div class="page-header">
+          <h1>PyClass API project <small>Python web framework</small></h1>
+        </div>
+        <div class="row">
+          <div class="span10">
+            <h2>Will be Data Visualiztion<br> </h2>
+            <ul>
+              {% for todo in todos %}
+              <li>{{ todo.description }}</li>
+              {% endfor %}
+            <ul>
+            <ul>
+              <li>{{ api }}</li>
+            <ul>
+            <form action="/add" method="POST" id="add_to_todo_list">
+               <input type="text" name="todo_item"/>
+               <input type="submit" class="btn" name="add_todo_submit" value="Submit Data!"/>
+            </form>
+          </div>
+          <div class="span4">
+            <h3>Let's make a real todo list here</h3>
+            <ul>
+          <li>Do we need a login?</li>
+          <li>links go nowhere!</li>
+          <li>where is the map/layout of the page?</li>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <p>In progress... 2014</p>
+      </footer>
+
+    </div> <!-- /container -->
+  </body>
+
+</html>

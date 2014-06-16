@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% set active_page = "graphs" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/graph.css') }}">
+{% endblock %}
+
+{% block sidebar %}
+{{ super() }}
+        {% if  saved_graphs%}
+        <div class="saved-graphs">
+          <h5>Saved Graphs</h5>
+        {% for graph in saved_graphs %}
+        <div class="graph-list-container">
+            <div>
+                <form role="form" id="savedGraphForm">
+                    <input name='keyword_1' type='hidden' value="{{graph.keyword_1}}">
+                    <input name='keyword_2' type='hidden' value="{{graph.keyword_2}}">
+                    <input type='hidden' name='date_low' value="{{graph.date_low}}">
+                    <input type='hidden' name='date_high' value="{{graph.date_high}}">
+                    <select hidden  name='granularity' type='hidden'>
+                        <option value="{{graph.granularity}}">day</option>
+                    </select>
+                    <ul class="list-unstyled saved-graph-list">
+                      <li>
+                        <a class="make_graph" style="width: 95px">
+                          {{graph.graph_name}}<br>
+                          {{graph.date_low}} to {{graph.date_high}}<br>
+                          Granularity: {{graph.granularity}}
+                        </a>
+                      </li>
+                    </ul>
+                </form>
+            </div>
+            <div class="delete_graph_container">
+                <form class="form form-inline delete_saved_graph" method="post" role="delete_graph_form">
+                    {{ delete_graph_form.hidden_tag() }}
+                    {{ wtf.form_errors(delete_graph_form, hiddens="only") }}
+                    {{ wtf.form_field(delete_graph_form.graph_id, value=graph.id, type="hidden") }}
+
+                    <button class='btn btn-link btn-xs'  id="delete_graph_form-submit" name="delete_graph_form-submit" type="submit" value="Delete">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+  <h1>A Politician Says What?</h1>
+  <h5 class="text-primary">Find out the frequency politicians say your favorite words.</h5>
+</div>
+<form class="form-inline ajax-graph" role="form">
+
+  <div class="form-group">
+    <label class="sr-only" for="keyword_1">Keyword 1</label>
+    <input name='keyword_1' class="form-control" id="keyword_1" placeholder="Keyword 1">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="keyword_2">Keyword 2</label>
+    <input name='keyword_2' class="form-control" id="keyword_2" placeholder="Keyword 2">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="date_low">Start Date</label>
+    <input type="date" name='date_low' class="form-control" id="date_low" placeholder="Start Date">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="date_high">End Date</label>
+    <input type="date" name='date_high' class="form-control" id="date_high" placeholder="End Date">
+  </div>
+  <div class="form-group">
+    <select name='granularity' id="granularity"  class="form-control">
+        <option value="day">day</option>
+        <option value="month">month</option>
+        <option value="year">year</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <div class="">
+      <a id="calculate" class="btn btn-danger make_graph">Make Graph <span class="glyphicon glyphicon-stats"></span></a>
+    </div>
+  </div>
+</form>
+<h2 id="keyword"></h2>
+<div class="graph-text-container clearfix container-fluid">
+<div class="row">
+<div class="graph-container col-md-8">
+    <div class="hidden-container">
+        <div class="opaque-overlay"></div>
+        <div class="progress-container">
+            <p>Loading...</p>
+            <div class="progress progress-striped active" >
+              <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                <span class="sr-only">100% Complete</span>
+              </div>
+            </div>
+        </div>
+    </div>
+    <div id="placeholder" style="width:100%; height:300px"></div>
+</div>
+<div class="cr-records col-md-4">
+  <div class="hidden-container">
+      <div class="opaque-overlay"></div>
+      <div class="progress-container">
+          <p>Loading...</p>
+          <div class="progress progress-striped active" >
+            <div class="progress-bar"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+              <span class="sr-only">100% Complete</span>
+            </div>
+          </div>
+      </div>
+  </div>
+  <h3>Congressional Records</h3>
+  <div class="cr-records-inner">
+    <p class="lead">Make a graph and click points to return congressional records from that time period.</p>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- Button trigger modal -->
+
+    <button type="button" class="btn btn-success btn-lg save-graph-button pull-right" data-toggle="modal" data-target="#saveGraph"><span class="glyphicon glyphicon-save"></span> Save Graph</button>
+
+
+<!-- Modal -->
+<div class="modal fade" id="saveGraph" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Save Graph</h4>
+      </div>
+      <div class="modal-body">
+        {{ wtf.quick_form(saved_graph_form) }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ul id="result"></ul>
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script language="JavaScript" type="text/javascript" src="{{ url_for('static', filename='js/flot.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ url_for('static', filename='js/jquery.flot.time.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ url_for('static', filename='js/jquery.flot.tooltip.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ url_for('static', filename='js/testajax.js') }}"></script>
+<script language="JavaScript" type="text/javascript" src="{{ url_for('static', filename='js/capitolrecords.js') }}"></script>
+
+{% endblock %}

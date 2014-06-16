@@ -1,0 +1,41 @@
+.keyword_search_saved_graph .form-group, .delete_graph .form-group{
+    display: none;
+}
+
+.form-group label{
+    display: block;
+}
+
+.btn{
+    vertical-align: bottom;
+}
+
+.navbar-brand{
+    color: #d9534f !important;
+}
+
+.navbar-brand .brand-white{
+    color: #fff;
+}
+
+.navbar-brand .glyphicon{
+    color: #428bca;
+}
+
+.menu{
+    cursor: pointer
+}
+
+.menu h5{
+    margin-left: 15px;
+    position: relative;
+}
+
+.menu li{
+    border-bottom: 1px solid #ccc;
+}
+
+.menu .glyphicon{
+    position: absolute;
+    right: 10px;
+}

@@ -1,0 +1,32 @@
+<!-- extend base layout -->
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page_content %}
+<script type="text/javascript">
+function set_openid(openid, pr)
+{
+    u = openid.search('<username>')
+    if (u != -1) {
+        // openid requires username
+        user = prompt('Enter your ' + pr + ' username:')
+        openid = openid.substr(0, u) + user
+    }
+
+    $(document).find('form').attr("role","login").find("#openid").val(openid);
+}
+</script>
+<row>
+<div class="col-md-6 col-md-offset-3">
+<div class="page-header">
+    <h1>Sign In</h1>
+</div>
+    {{ wtf.quick_form(form, role="login") }}
+    <br>
+    |{% for pr in providers %}
+    <a href="javascript:set_openid('{{pr.url}}', '{{pr.name}}');">{{pr.name}}</a> |
+    {% endfor %}
+</div>
+</row>
+
+{% endblock %}

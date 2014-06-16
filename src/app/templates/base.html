@@ -1,0 +1,104 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}”
+{% block title %}Poligraphed{% endblock %}
+
+
+{% set active_page = active_page|default('index') -%}
+{% if active_page == 'index' %}
+{% set navigation_bar = [
+    ('/graph', 'graphs', 'Graphs', 'glyphicon glyphicon-stats'),
+    ('/contact', 'contact', 'Contact', 'glyphicon glyphicon-send'),
+    ('/about', 'about', 'About', 'glyphicon glyphicon-info-sign'),
+    ('/donations', 'donations', 'Donations', 'glyphicon glyphicon-usd')
+] -%}
+{% else %}
+{% set navigation_bar = [
+    ('/graph', 'graphs', 'Graphs', 'glyphicon glyphicon-stats'),
+    ('/contact', 'contact', 'Contact', 'glyphicon glyphicon-send'),
+    ('/about', 'about', 'About', 'glyphicon glyphicon-info-sign'),
+    ('/donations', 'donations', 'Donations', 'glyphicon glyphicon-usd'),
+    ('/', 'index', 'Home', 'glyphicon glyphicon-home')
+] -%}
+{% endif %}
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+{% endblock %}
+
+{% block navbar %}
+<header class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{{ url_for('index') }}">Poli<span class="brand-white">graphed</span> <span class="glyphicon glyphicon-stats"></span></a>
+        </div>
+        <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
+        {% if g.user.is_authenticated() %}
+          <ul class="dropdown-menu">
+            <li><a href ="{{ url_for('edit') }}">Account</a></li>
+            <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-user"></span> Logout</a></li>
+          </ul>
+        {% endif %}
+        </li>
+      </ul>
+
+        </div><!--/.navbar-collapse -->
+    </div>
+</header>
+{% endblock %}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+    {% for message in messages %}
+        <li>{{ message }} </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+    {% block sidebar %}
+        <ul class='list-unstyled menu' data-toggle="collapse" data-target="#demo">
+            <li>
+                <h5>
+                  <strong>Menu</strong><span {% if active_page == 'graphs' %}class="glyphicon glyphicon-plus"{% else %}class="glyphicon glyphicon-minus"{% endif %}></span>
+                </h5>
+            </li>
+        </ul>
+        <ul id="demo"  {% if active_page == 'graphs' %}class="nav nav-sidebar collapse"{% else %}class="nav nav-sidebar collapse in"{% endif %}>
+            {% for href, id, caption, icon in navigation_bar %}
+            <li{% if id == active_page %}
+            class="active"
+            {% endif%}>
+            <a href="{{ href|e }}"><strong><span class="{{icon}}"></span> {{ caption|e }} <span class="glyphicon glyphicon-chevron-right pull-right"></span></strong></a></li>
+            {% endfor %}
+        </ul>
+    {%endblock%}
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    {% block page_content %}
+    {% endblock %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script language="JavaScript" type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script type=text/javascript>
+  var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% set active_page = "edit" %}
+{% block page_content %}
+<!-- extend base layout -->
+</script>
+  <div class="jumbotron">
+    <div class="container">
+           <h1>Hello {{g.user.nickname}}</h1>
+
+Edit Your Nickname
+<form action="" method="post" name="edit">
+    {{form.hidden_tag()}}
+    <table>
+        <tr>
+
+            <td>Your nickname:</td>
+            <td>
+                {{form.nickname(size = 24)}}
+                {% for error in form.errors.nickname %}
+                <br><span style="color: red;">[{{error}}]</span>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Save Changes"></td>
+        </tr>       </div>
+    </table>
+</form>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}”
+{% set active_page = "index" %}
+
+{% block page_content %}
+
+<form class="form form-inline" method="post" role="save_form">
+    {{ saved_graph_form.hidden_tag() }}
+    {{ wtf.form_errors(saved_graph_form, hiddens="only") }}
+
+    {{ wtf.form_field(saved_graph_form.graph_name) }}
+    {{ wtf.form_field(saved_graph_form.keyword_1) }}
+    {{ wtf.form_field(saved_graph_form.keyword_2) }}
+    {{ wtf.form_field(saved_graph_form.date_low) }}
+    {{ wtf.form_field(saved_graph_form.date_high) }}
+    {{ wtf.form_field(saved_graph_form.granularity) }}
+
+    {{ saved_graph_form.submit(class="btn btn-default") }}
+</form>
+
+
+<h2>Graph Data</h2>
+  {% if graph %}
+      <div style="width: 100%; float:left; padding-bottom: 15px">
+      {% for (keyword, results) in graph %}
+      <div style="width: 172px; float:left; word-wrap: break-word; margin-right: 15px; text-wrap: unrestricted">
+      Keyword: {{ keyword }}
+        {% for dict in results %}
+          {% for key, value in dict.iteritems() %}
+            <li>{{ key }}: {{ value }}</li>
+          {% endfor %}
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+{{ wtf.quick_form(keyword_form) }}
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script language="JavaScript" type="text/javascript" src="{{ url_for('static', filename='js/flot.js') }}"></script>
+{% endblock %}
