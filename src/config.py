@@ -10,9 +10,8 @@ if os.environ.get("HEROKU") is None:
       SQLALCHEMY_MIGRATE_REPO = os.path.join(basedir, 'db_repository')
       from apikey import _API_KEY
       API_KEY = _API_KEY
-      print 'local'
+      print ' This app is on a local server'
 else:
-      print 'heroku'
       app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["DATABASE_URL"]
       # SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL","postgresql://pguser:password/dbname")
       API_KEY = str(os.environ.get("theapikey"))
